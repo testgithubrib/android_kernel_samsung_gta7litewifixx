@@ -23,7 +23,7 @@ jobs:
         arch: arm64
         compiler: aosp-clang/android11-release/clang-r383902/binutils
         defconfig: gta7litewifi_defconfig
-        image: Image.gz-dtb
+        image: Image.gz
 
     - name: Upload Kernel and Module
       uses: actions/upload-artifact@v4
