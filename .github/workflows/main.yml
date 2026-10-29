@@ -6,29 +6,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout kernel source
-      uses: actions/checkout@v4
+      - name: Checkout kernel source
+        uses: actions/checkout@v4
 
-    - name: Set up MemKernel as a module (M-OUT) with specified name
-      run: |
-        curl -LSs "https://raw.githubusercontent.com/Poko-Apps/MemKernel/main/kernel/setup.sh" | bash -s M dogi
+      - name: Set up MemKernel as a module (M-OUT) with specified name
+        run: |
+          curl -LSs "https://raw.githubusercontent.com/Poko-Apps/MemKernel/main/kernel/setup.sh" | bash -s M dogi
 
-    - name: Android kernel build
-      uses: lemniskett/android-kernel-actions@master
-      id: build
-      env:
-        NAME: Loganysl
-      with:
-        arch: arm64
-        compiler: aosp-clang/android11-release/clang-r383902/binutils
-        defconfig: gta7litewifi_defconfig
-        image: Image.gz
+      - name: Android kernel build
+        uses: lemniskett/android-kernel-actions@master
+        id: build
+        env:
+          NAME: Loganysl
+        with:
+          arch: arm64
+          compiler: aosp-clang/android11-release/clang-r383902/binutils
+          defconfig: gta7litewifi_defconfig
+          image: Image.gz
 
-    - name: Upload Kernel and Module
-      uses: actions/upload-artifact@v4
-      with:
-        name: moduleandkernel
-        path: |
-          ${{ steps.build.outputs.outfile }}
-          ./out/drivers/memkernel/memkernel.ko
+      - name: Upload Kernel and Module
+        uses: actions/upload-artifact@v4
+        with:
+          name: moduleandkernel
+          path: |
+            out/arch/arm64/boot/Image.gz
+            out/drivers/memkernel/dogi_memk.ko
+          if-no-files-found: error
